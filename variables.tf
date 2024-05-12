@@ -2,6 +2,7 @@ variable "aws_region" {
   description = "value of the region to deploy the resources"
   default     = "us-east-1"
 }
+
 variable "aws_profile" {
   description = "value of the profile to use"
   default     = "default"
@@ -10,21 +11,37 @@ variable "aws_profile" {
 variable "vpc_ip4_cidr_block" {
   description = "value of the IP4 cidr block for the vpc"
   default     = "10.16.0.0/16"
+  validation {
+    condition     = can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/\\d{1,2}$", var.vpc_ip4_cidr_block))
+    error_message = "value of the IP4 cidr block for the vpc must be a valid CIDR block"
+  }
 }
 
 variable "is_ipv6_enabled" {
   description = "enables ipv6 for vpc and subnets"
   default     = true
+  validation {
+    condition     = can(regex("^(true|false)$", var.is_ipv6_enabled))
+    error_message = "value of the is_ipv6_enabled must be a boolean"
+  }
 }
 
 variable "ipv4_subnets_new_bits" {
   description = "value of the new bits for the ipv4 subnets"
   default     = 4 # 16 subnets /20
+  validation {
+    condition     = can(regex("^\\d+$", var.ipv4_subnets_new_bits))
+    error_message = "value of the new bits for the ipv4 subnets must be a number"
+  }
 }
 
 variable "ipv6_subnets_new_bits" {
   description = "value of the new bits for the ipv4 subnets"
   default     = 8 # min /64
+  validation {
+    condition     = can(regex("^\\d+$", var.ipv6_subnets_new_bits))
+    error_message = "value of the new bits for the ipv6 subnets must be a number"
+  }
 }
 
 variable "sn_details" {
@@ -34,6 +51,10 @@ variable "sn_details" {
     availability_zone = string
     is_public         = bool
   }))
+  validation {
+    condition     = length(var.sn_details) > 0
+    error_message = "value of the subnets details for the vpc must be a list with at least one element"
+  }
   default = [
     {
       name              = "sn-reserved-A-private"
@@ -107,11 +128,19 @@ variable "instance_tenancy" {
 variable "enable_dns_hostnames" {
   description = "value of the enable dns hostnames for the vpc"
   default     = true
+  validation {
+    condition     = can(regex("^(true|false)$", var.enable_dns_hostnames))
+    error_message = "value of the enable dns hostnames for the vpc must be a boolean"
+  }
 }
 
 variable "enable_dns_support" {
   description = "value of the enable dns support for the vpc"
   default     = true
+  validation {
+    condition     = can(regex("^(true|false)$", var.enable_dns_support))
+    error_message = "value of the enable dns support for the vpc must be a boolean"
+  }
 }
 
 variable "environment" {
