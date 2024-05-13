@@ -4,4 +4,4 @@ AWS Custom 3-Tier VPC is a Terraform module for creating a custom 3-tier VPC on 
 
 ![End State of VPC](https://github.com/acantril/aws-sa-associate-saac03/blob/main/0800-VIRTUAL_PRIVATE_CLOUD(VPC)/02_custom_vpc/vpc_endstate.png)
 
-VPC architecture is based on [Cantrill's SAAC course](https://github.com/acantril/aws-sa-associate)
+VPC architecture is based on [Cantrill's aws sa associate](https://github.com/acantril/aws-sa-associate-saac03)
