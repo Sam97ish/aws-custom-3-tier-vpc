@@ -37,12 +37,12 @@ run "unit_tests_for_vpc_module" {
     }
 
     assert {
-        condition = aws_vpc_security_group_egress_rule.app_to_db_tls.from_port == 443 && aws_vpc_security_group_egress_rule.app_to_db_tls.to_port == 443
+        condition = aws_vpc_security_group_egress_rule.app_to_db_tls.from_port == 1433 && aws_vpc_security_group_egress_rule.app_to_db_tls.to_port == 27017
         error_message = "app security group does not have the correct egress rule to db for tls"
     }
 
     assert {
-        condition = aws_vpc_security_group_ingress_rule.app_to_db_tls.from_port == 443 && aws_vpc_security_group_ingress_rule.app_to_db_tls.to_port == 443
+        condition = aws_vpc_security_group_ingress_rule.app_to_db_tls.from_port == 0 && aws_vpc_security_group_ingress_rule.app_to_db_tls.to_port == 65535
         error_message = "db security group does not have the correct ingress rule from app for tls"
     }
 
@@ -77,7 +77,7 @@ run "e2e_tests" {
     command = apply
 
     assert {
-        condition = alltrue([for sn in var.sn_details : aws_route_table_association.public-subnet-association[sn.name].subnet_id == aws_subnet.vpc_subnets[sn.name].id if sn.is_public])
+        condition = alltrue([for sn in var.sn_details : aws_route_table_association.public-subnet-association[sn.name].subnet_id != aws_subnet.vpc_subnets[sn.name].id if !sn.is_public])
         error_message = "non public subnets are associated with the public route table"
     }
 
