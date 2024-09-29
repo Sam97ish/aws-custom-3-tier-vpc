@@ -69,9 +69,10 @@ resource "aws_vpc_security_group_egress_rule" "app_to_db_tls" {
 
   referenced_security_group_id = aws_security_group.db_sg.id
 
-  from_port   = 443
+  # restrict depending on what you're running
+  from_port   = 1433
   ip_protocol = "tcp"
-  to_port     = 443
+  to_port     = 27017
 }
 
 # DB TIER
@@ -92,7 +93,8 @@ resource "aws_vpc_security_group_ingress_rule" "app_to_db_tls" {
 
   referenced_security_group_id = aws_security_group.app_sg.id
 
-  from_port   = 443
+  # restrict depending on what you're running
+  from_port   = 0
   ip_protocol = "tcp"
-  to_port     = 443
+  to_port     = 65535
 }
